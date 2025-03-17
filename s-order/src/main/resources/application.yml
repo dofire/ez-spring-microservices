@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: s-order
+
+  datasource:
+    url: jdbc:postgresql://db:5469/db_order
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
