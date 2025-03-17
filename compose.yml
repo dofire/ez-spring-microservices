@@ -17,9 +17,9 @@ services:
   s-user:
     build: ./s-user
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_user
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_USER}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
     networks:
@@ -28,9 +28,9 @@ services:
   s-product:
     build: ./s-product
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_product
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_PRODUCT}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
     networks:
@@ -39,9 +39,9 @@ services:
   s-order:
     build: ./s-order
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_order
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_ORDER}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
     networks:
@@ -50,9 +50,9 @@ services:
   s-payment:
     build: ./s-payment
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_payment
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_PAYMENT}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
     networks:
@@ -67,8 +67,8 @@ services:
     image: postgres:17
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./infras/sql/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
