@@ -25,7 +25,8 @@ repositories {
 
 dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-web")
+//	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.cloud:spring-cloud-starter-gateway:4.2.0")
 
 
 	compileOnly("org.projectlombok:lombok")

@@ -9,8 +9,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-class UserService {
-
+public class UserService {
     private final UserRepository userRepository;
 
     public List<UserEntity> getAllUsers() {
@@ -19,5 +18,22 @@ class UserService {
 
     public Optional<UserEntity> getUserById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    public UserEntity createUser(UserEntity user) {
+        return userRepository.save(user);
+    }
+
+    public UserEntity updateUser(UUID id, UserEntity newUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setUsername(newUser.getUsername());
+            user.setEmail(newUser.getEmail());
+            user.setPassword(newUser.getPassword());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
     }
 }

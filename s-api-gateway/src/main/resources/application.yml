@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: s-api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://s-user:8080
+          predicates:
+            - Path=/user/**
+
+        - id: order-service
+          uri: http://s-order:8080
+          predicates:
+            - Path=/order/**
+
+        - id: payment-service
+          uri: http://s-payment:8080
+          predicates:
+            - Path=/payment/**
+
