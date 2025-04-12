@@ -9,6 +9,8 @@ spring:
           uri: http://s-user:8080
           predicates:
             - Path=/user/**
+          filters:
+            - StripPrefix=1
 
         - id: order-service
           uri: http://s-order:8080
@@ -19,4 +21,11 @@ spring:
           uri: http://s-payment:8080
           predicates:
             - Path=/payment/**
+
+        - id: product-service
+          uri: http://s-product:8080
+          predicates:
+            - Path=/product/**
+          filters:
+            - StripPrefix=1
 
