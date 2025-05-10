@@ -2,45 +2,12 @@ version: '3.9'
 
 services:
 
-  keycloak:
-    image: keycloak/keycloak:latest
-    container_name: keycloak
-    command: start-dev
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-
-      - KC_DB=postgres
-      - KC_DB_URL_HOST=keycloak-db
-      - KC_DB_URL_PORT=5432
-      - KC_DB_URL_DATABASE=keycloak
-      - KC_DB_USERNAME=${POSTGRES_USER}
-      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - "8081:8080"
-    restart: always
-    networks:
-      - app-network
-    depends_on:
-      - keycloak-db
-
-  s-api-gateway:
-    build: ./s-api-gateway
+  s-order:
+    build: ./s-order
     ports:
       - "8080:8080"
-    depends_on:
-      - s-user
-      - s-product
-      - s-order
-      - s-payment
-      - s-notification
-    networks:
-      - app-network
-
-  s-user:
-    build: ./s-user
     environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_USER}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_ORDER}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
@@ -59,17 +26,6 @@ services:
     networks:
       - app-network
 
-  s-order:
-    build: ./s-order
-    environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_ORDER}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-    depends_on:
-      - db
-    networks:
-      - app-network
-
   s-payment:
     build: ./s-payment
     environment:
@@ -78,11 +34,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
-    networks:
-      - app-network
-
-  s-notification:
-    build: ./s-notification
     networks:
       - app-network
 
@@ -98,21 +49,8 @@ services:
     networks:
       - app-network
 
-  keycloak-db:
-    image: postgres:17
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=keycloak
-    volumes:
-      - keycloak-db-data:/var/lib/postgresql/data
-    networks:
-      - app-network
-    restart: always
-
 networks:
   app-network:
 
 volumes:
   postgres-data: {}
-  keycloak-db-data: {}
