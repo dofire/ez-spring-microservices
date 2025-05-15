@@ -1,9 +1,12 @@
 package com.dofire.order.src;
 
+import com.dofire.order.kafka.MqOrderDto;
+import com.dofire.order.kafka.MqOrderProducer;
 import com.dofire.order.rpc.RpcStockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -11,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final OrderEventProducer orderEventProducer;
+    private final MqOrderProducer mqOrderProducer;
 
     private final RpcStockService rpcStockService;
 
@@ -19,20 +22,35 @@ public class OrderService {
             OrderDto request
     ) {
 
-        return rpcStockService.reserveStock(request.getProductId(), request.getQuantity());
+        var ok = rpcStockService.reserveStock(
+                request.getProductId().toString(),
+                request.getQuantity()
+        );
 
-//        OrderEntity savedOrderEntity = orderRepository.save(orderEntity);
-//
-//        // Publish event
-//        OrderEventDto event = new OrderEventDto(
-//                savedOrderEntity.getId(),
-//                savedOrderEntity.getProductId(),
-//                savedOrderEntity.getQuantity(),
-//                savedOrderEntity.getStatus()
-//        );
-//        orderEventProducer.sendOrderEvent(event);
+        if (!ok) {
+            // Stock not available, show error message to user
+            return false;
+        }
 
-//        return savedOrderEntity;
+        var orderEntity = OrderEntity.builder()
+                .productId(request.getProductId())
+                .quantity(request.getQuantity())
+                .totalPrice(BigDecimal.ZERO)
+                .status(OrderStatus.PENDING.toString())
+                .build();
+
+        OrderEntity savedOrderEntity = orderRepository.save(orderEntity);
+
+        // Publish event
+        MqOrderDto event = new MqOrderDto(
+                savedOrderEntity.getId(),
+                savedOrderEntity.getProductId(),
+                savedOrderEntity.getQuantity(),
+                savedOrderEntity.getStatus()
+        );
+        mqOrderProducer.sendOrderEvent(event);
+
+        return true;
     }
 
     public List<OrderEntity> getAllOrders() {

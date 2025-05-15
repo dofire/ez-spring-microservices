@@ -51,6 +51,14 @@ services:
     networks:
       - app-network
 
+  kafka:
+    image: apache/kafka:4.0.0
+    restart: always
+    ports:
+      - "9092:9092"
+    networks:
+      - app-network
+
 networks:
   app-network:
 

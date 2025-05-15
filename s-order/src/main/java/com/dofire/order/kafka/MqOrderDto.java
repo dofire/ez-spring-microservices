@@ -1,4 +1,4 @@
-package com.dofire.order.src;
+package com.dofire.order.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderEventDto {
+public class MqOrderDto {
     private UUID orderId;
     private UUID productId;
     private int quantity;
