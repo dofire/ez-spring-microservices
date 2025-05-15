@@ -13,7 +13,7 @@ INSERT INTO users (username, email, password)
 VALUES ('admin', 'admin@example.com', '1');
 
 
--- order service
+-- orderEntity service
 CREATE TABLE IF NOT EXISTS orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,

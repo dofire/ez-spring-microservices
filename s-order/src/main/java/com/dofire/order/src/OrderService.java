@@ -1,7 +1,10 @@
 package com.dofire.order.src;
 
+import com.dofire.order.rpc.RpcStockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -10,19 +13,29 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderEventProducer orderEventProducer;
 
-    public Order createOrder(Order order) {
-        Order savedOrder = orderRepository.save(order);
+    private final RpcStockService rpcStockService;
 
-        // Publish event
-        OrderEvent event = new OrderEvent(
-                savedOrder.getId(),
-                savedOrder.getUserId(),
-                savedOrder.getProductId(),
-                savedOrder.getQuantity(),
-                savedOrder.getStatus()
-        );
-        orderEventProducer.sendOrderEvent(event);
+    public boolean createOrder(
+            OrderDto request
+    ) {
 
-        return savedOrder;
+        return rpcStockService.reserveStock(request.getProductId(), request.getQuantity());
+
+//        OrderEntity savedOrderEntity = orderRepository.save(orderEntity);
+//
+//        // Publish event
+//        OrderEventDto event = new OrderEventDto(
+//                savedOrderEntity.getId(),
+//                savedOrderEntity.getProductId(),
+//                savedOrderEntity.getQuantity(),
+//                savedOrderEntity.getStatus()
+//        );
+//        orderEventProducer.sendOrderEvent(event);
+
+//        return savedOrderEntity;
+    }
+
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository.findAll();
     }
 }

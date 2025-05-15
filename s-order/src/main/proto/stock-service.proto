@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package com.dofire.order;
+
+service StockService {
+  rpc getStock (StockRequest) returns (StockResponse);
+  rpc reserveStock (ReserveStockRequest) returns (ReserveStockResponse);
+}
+
+message StockRequest {
+  string productId = 1;
+}
+
+message StockResponse {
+  bool inStock = 1;
+}
+
+message ReserveStockRequest {
+  string productId = 1;
+  int32 quantity = 2;
+}
+
+message ReserveStockResponse {
+  bool success = 1;
+}

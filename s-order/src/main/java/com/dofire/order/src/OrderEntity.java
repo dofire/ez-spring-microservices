@@ -12,31 +12,29 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+@Builder
+public class OrderEntity {
 
     @Id
     @GeneratedValue
     private UUID id;
     
-    @Column(nullable = false)
-    private UUID userId;
-    
-    @Column(nullable = false)
+    @Column(name = "product_id")
     private UUID productId;
     
-    @Column(nullable = false)
+    @Column
     private int quantity;
     
-    @Column(nullable = false)
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
     
-    @Column(nullable = false)
+    @Column
     private String status;
     
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
     
-    @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

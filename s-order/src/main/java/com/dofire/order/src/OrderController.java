@@ -14,12 +14,25 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<OrderEntity>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.createOrder(order));
+    public ResponseEntity<?> createOrder(
+            @RequestBody OrderDto request
+    ) {
+        var ok = orderService.createOrder(request);
+
+        if (ok) {
+            return ResponseEntity.ok("success");
+        }
+
+        return ResponseEntity.ok("error");
+    }
+
+    @GetMapping("ok")
+    public ResponseEntity<String> getOk() {
+        return ResponseEntity.ok("ok");
     }
 }

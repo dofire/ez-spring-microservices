@@ -1,7 +1,8 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 COPY . .
-RUN chmod +x gradlew && ./gradlew clean build -x test
+COPY .gradle /app/.gradle
+RUN chmod +x gradlew && ./gradlew build -x test
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
