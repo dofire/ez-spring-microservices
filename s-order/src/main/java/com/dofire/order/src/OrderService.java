@@ -22,15 +22,15 @@ public class OrderService {
             OrderDto request
     ) {
 
-        var ok = rpcStockService.reserveStock(
-                request.getProductId().toString(),
-                request.getQuantity()
-        );
-
-        if (!ok) {
-            // Stock not available, show error message to user
-            return false;
-        }
+//        var ok = rpcStockService.reserveStock(
+//                request.getProductId().toString(),
+//                request.getQuantity()
+//        );
+//
+//        if (!ok) {
+//            // Stock not available, show error message to user
+//            return false;
+//        }
 
         var orderEntity = OrderEntity.builder()
                 .productId(request.getProductId())
