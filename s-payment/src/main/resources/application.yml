@@ -10,8 +10,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       max-poll-records: 1000
-      fetch-min-size: 10000 # 10.000 bytes
-      fetch-max-wait: 3000
+      fetch-min-size: 30000 # 20.000 bytes
+      fetch-max-wait: 500
     listener:
       ack-mode: manual_immediate
 
